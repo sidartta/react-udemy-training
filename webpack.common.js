@@ -1,14 +1,6 @@
-const path = require('path')
+const path = require('path');
 
 module.exports = {
-  mode: 'development',
-  devtool: 'eval-cheap-module-source-map',
-  devServer: {
-    static: {
-      directory: path.join(__dirname, 'dist'),
-    },
-    historyApiFallback: true,
-  },
   entry: './src/index.jsx',
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -17,9 +9,10 @@ module.exports = {
   module: {
     rules: [
       {
+        include: path.resolve(__dirname, 'src'),
+        exclude: /node_modules/,
         loader: 'babel-loader',
         test: /\.jsx?$/,
-        exclude: /node_modules/,
       },
       {
         test: /\.s?css$/,
@@ -40,4 +33,4 @@ module.exports = {
       '@views': path.resolve(__dirname, 'src/views'),
     },
   },
-}
+};

@@ -10,7 +10,7 @@ import {
 
 // Actions
 export const filterListItems = (list, criteria) => {
-  if (typeof list === 'object' && list.length > 0) {
+  if (typeof list === 'object') {
     list.map((elem) => {
       if (!elem.payee) {
         throw `Missing payee in element with id: ${elem.id}`;
