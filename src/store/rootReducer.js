@@ -1,0 +1,13 @@
+'use-strict'
+// External imports
+import { combineReducers } from '@reduxjs/toolkit'
+
+// Internal Imports
+import expensesReducer from '@store/expenses/expenses.slice.js'
+import categoriesReducer from '@store/categories/categories.slice.js'
+
+// MAIN LOGIC
+export const rootReducer = combineReducers({
+  expenses: expensesReducer,
+  categories: categoriesReducer,
+})
