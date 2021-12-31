@@ -5,11 +5,10 @@
   "private": true,
   "scripts": {
     "test": "jest --watchAll",
-    "build:prod": "webpack --config webpack.prod.js",
-    "build:dev": "webpack serve --open --config webpack.dev.js",
-    "serve": "live-server public/",
+    "build": "webpack --config webpack.prod.js",
+    "serve": "webpack serve --open --config webpack.dev.js",
     "start": "node server/server.js",
-    "heroku-postbuild": "npm run build:prod"
+    "heroku-postbuild": "npm run build"
   },
   "author": "Mohamed Khalf",
   "license": "MIT",
