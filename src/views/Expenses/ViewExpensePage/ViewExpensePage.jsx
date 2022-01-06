@@ -11,16 +11,16 @@ import {
   setSortBy,
   setStartDate,
   setEndDate,
-  clearExpenses,
   setDateFilter,
   resetDateFilter,
   resetIdFilter,
   resetExpenseID,
 } from '@store/expenses/expenses.slice.js';
 import { DatePickerRange } from '@components/DatePicker/DatePicker.jsx';
+import { clearAllExpenses } from '@store/expenses/expenses.actions';
 
 // Assets
-import '@app/App.scss';
+import './ViewExpensePage.scss';
 
 // Component
 const ViewExpensePage = () => {
@@ -32,26 +32,32 @@ const ViewExpensePage = () => {
     dispatch(resetExpenseID());
   }, []);
 
-  const renderExpenses = () => {
-    return expenses.map((expense) => (
-      <ExpenseListItem key={expense.id} {...expense} />
-    ));
+  const handleDeleteAll = async () => {
+    try {
+      dispatch(clearAllExpenses());
+    } catch {
+      console.error(
+        `There was an issue while clearing the expenses 💥. Error is : ${err.message}`
+      );
+    }
   };
 
   return (
     <div>
-      <button type="button" onClick={() => dispatch(clearExpenses())}>
+      <button
+        type="button"
+        onClick={handleDeleteAll}
+        disabled={expenses.length === 0}
+      >
         Delete All
       </button>
-      <ul style={{ borderBottom: '1px solid' }}>{renderExpenses()}</ul>
-      <div
-        style={{
-          display: 'flex',
-          maxWidth: '1000px',
-          alignItems: 'top',
-          justifyContent: 'space-between',
-        }}
-      >
+      <ul className="expenseListContainer">
+        {expenses.map((expense) => (
+          <ExpenseListItem key={expense.id} {...expense} />
+        ))}
+      </ul>
+      <fieldset className="filtersContainer">
+        <legend>Expense filters</legend>
         <div>
           <label htmlFor="text-search">Search expense: </label>
           <input
@@ -88,7 +94,7 @@ const ViewExpensePage = () => {
             resetFilter={() => dispatch(resetDateFilter())}
           />
         </div>
-      </div>
+      </fieldset>
     </div>
   );
 };

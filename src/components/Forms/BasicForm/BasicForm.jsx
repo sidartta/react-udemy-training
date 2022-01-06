@@ -6,7 +6,7 @@ import { parseISO } from 'date-fns/esm';
 import { SingleDatePicker } from '@components/DatePicker/DatePicker.jsx';
 
 // Assets
-import '@app/App.jsx';
+import './BasicForm.scss';
 
 // Component
 export const BasicForm = (props) => {
@@ -14,22 +14,9 @@ export const BasicForm = (props) => {
   return (
     <fieldset>
       <legend>{legend}</legend>
-      <div
-        style={{
-          padding: '2rem',
-          display: 'flex',
-          justifyContent: 'space-around',
-        }}
-      >
-        <div>
-          <label
-            htmlFor="expense-category"
-            style={{
-              marginLeft: '1rem',
-              marginRight: '1rem',
-              fontSize: '2rem',
-            }}
-          >
+      <div className="formContainer">
+        <div className="InputContainer">
+          <label className="InputContainer__label" htmlFor="expense-category">
             Category
           </label>
           <select
@@ -47,15 +34,8 @@ export const BasicForm = (props) => {
               ))}
           </select>
         </div>
-        <div>
-          <label
-            htmlFor="expense-payee"
-            style={{
-              marginLeft: '1rem',
-              marginRight: '1rem',
-              fontSize: '2rem',
-            }}
-          >
+        <div className="InputContainer">
+          <label htmlFor="expense-payee" className="InputContainer__label">
             Payee
           </label>
           <input
@@ -66,15 +46,8 @@ export const BasicForm = (props) => {
             required
           />
         </div>
-        <div>
-          <label
-            htmlFor="expense-amount"
-            style={{
-              marginLeft: '1rem',
-              marginRight: '1rem',
-              fontSize: '2rem',
-            }}
-          >
+        <div className="InputContainer">
+          <label htmlFor="expense-amount" className="InputContainer__label">
             Amount
           </label>
           <input
@@ -85,8 +58,7 @@ export const BasicForm = (props) => {
             required
           />
         </div>
-        <div>
-          {}
+        <div className="InputContainer">
           <SingleDatePicker
             initialDate={parseISO(expense.createdAt)}
             setDateAction={(date) =>

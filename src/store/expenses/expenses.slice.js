@@ -1,14 +1,24 @@
 // External imports
-import { createSlice } from '@reduxjs/toolkit';
+import { createAction, createSlice } from '@reduxjs/toolkit';
 import { formatISO, parseISO } from 'date-fns';
 
 // Internal imports
-import { LocalStorageService } from '@services/index';
-import { filterListItems, sortByListItems } from './expenses.actions';
+import {
+  filterListItems,
+  sortByListItems,
+  addExpensetoDB,
+  initializeExpenses,
+  clearAllExpenses,
+  deleteExpense,
+  editExpense,
+} from './expenses.actions';
 
 // Initialization of state
 export const initialState = {
-  expenses: LocalStorageService.get('expenses') || [],
+  expenses: [],
+  loading: 'idle',
+  currentRequestId: undefined,
+  error: null,
   filters: {
     text: '',
     sortBy: '',
@@ -20,24 +30,11 @@ export const initialState = {
   },
 };
 
+// Expenses sclice definition
 const expensesSlice = createSlice({
   name: 'expenses',
   initialState,
   reducers: {
-    addExpense: (state, action) => {
-      state.expenses.push(action.payload);
-    },
-    editExpense: (state, action) => {
-      const stateSubset = state.expenses.filter(
-        (elem) => elem.id !== action.payload.id
-      );
-      state.expenses = [...stateSubset, action.payload];
-    },
-    deleteExpense: (state, action = '') => {
-      state.expenses = state.expenses.filter(
-        (elem) => elem.id !== action.payload
-      );
-    },
     setTextFilter: (state, action = '') => {
       state.filters.text = action.payload;
     },
@@ -56,10 +53,6 @@ const expensesSlice = createSlice({
     setEndDate: (state, action) => {
       state.filters.endDate = action.payload;
     },
-    clearExpenses: (state) => {
-      LocalStorageService.clear();
-      state.expenses = [];
-    },
     setDateFilter: (state) => {
       state.filters.filterByDate = true;
     },
@@ -73,19 +66,164 @@ const expensesSlice = createSlice({
       state.filters.filterById = false;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(addExpensetoDB.pending, (state, action) => {
+        if (state.loading === 'idle') {
+          state.loading = 'pending';
+          state.currentRequestId = action.meta.requestId;
+        }
+      })
+      .addCase(addExpensetoDB.fulfilled, (state, action) => {
+        const { requestId } = action.meta;
+        if (
+          state.currentRequestId === requestId &&
+          state.loading === 'pending'
+        ) {
+          state.expenses.push(action.payload);
+          state.currentRequestId = undefined;
+          state.loading = 'idle';
+        }
+      })
+      .addCase(addExpensetoDB.rejected, (state, action) => {
+        const { requestId } = action.meta;
+        if (
+          state.currentRequestId === requestId &&
+          state.loading === 'pending'
+        ) {
+          state.currentRequestId = undefined;
+          state.loading = 'idle';
+          state.error = action.error;
+        }
+      })
+      .addCase(initializeExpenses.pending, (state, action) => {
+        if (state.loading === 'idle') {
+          state.loading = 'pending';
+          state.currentRequestId = action.meta.requestId;
+        }
+      })
+      .addCase(initializeExpenses.fulfilled, (state, action) => {
+        const { requestId } = action.meta;
+        if (
+          state.currentRequestId === requestId &&
+          state.loading === 'pending'
+        ) {
+          state.expenses = action.payload;
+          state.currentRequestId = undefined;
+          state.loading = 'idle';
+        }
+      })
+      .addCase(initializeExpenses.rejected, (state, action) => {
+        const { requestId } = action.meta;
+        if (
+          state.currentRequestId === requestId &&
+          state.loading === 'pending'
+        ) {
+          state.currentRequestId = undefined;
+          state.loading = 'idle';
+          state.error = action.error;
+        }
+      })
+      .addCase(clearAllExpenses.pending, (state, action) => {
+        if (state.loading === 'idle') {
+          state.loading = 'pending';
+          state.currentRequestId = action.meta.requestId;
+        }
+      })
+      .addCase(clearAllExpenses.fulfilled, (state, action) => {
+        const { requestId } = action.meta;
+        if (
+          state.currentRequestId === requestId &&
+          state.loading === 'pending'
+        ) {
+          state.expenses = [];
+          state.currentRequestId = undefined;
+          state.loading = 'idle';
+        }
+      })
+      .addCase(clearAllExpenses.rejected, (state, action) => {
+        const { requestId } = action.meta;
+        if (
+          state.currentRequestId === requestId &&
+          state.loading === 'pending'
+        ) {
+          state.currentRequestId = undefined;
+          state.loading = 'idle';
+          state.error = action.error;
+        }
+      })
+      .addCase(deleteExpense.pending, (state, action) => {
+        if (state.loading === 'idle') {
+          state.loading = 'pending';
+          state.currentRequestId = action.meta.requestId;
+        }
+      })
+      .addCase(deleteExpense.fulfilled, (state, action) => {
+        const { requestId } = action.meta;
+        if (
+          state.currentRequestId === requestId &&
+          state.loading === 'pending'
+        ) {
+          state.expenses = state.expenses.filter(
+            (elem) => elem.id !== action.payload
+          );
+          state.currentRequestId = undefined;
+          state.loading = 'idle';
+        }
+      })
+      .addCase(deleteExpense.rejected, (state, action) => {
+        const { requestId } = action.meta;
+        if (
+          state.currentRequestId === requestId &&
+          state.loading === 'pending'
+        ) {
+          state.currentRequestId = undefined;
+          state.loading = 'idle';
+          state.error = action.error;
+        }
+      })
+      .addCase(editExpense.pending, (state, action) => {
+        if (state.loading === 'idle') {
+          state.loading = 'pending';
+          state.currentRequestId = action.meta.requestId;
+        }
+      })
+      .addCase(editExpense.fulfilled, (state, action) => {
+        const { requestId } = action.meta;
+        if (
+          state.currentRequestId === requestId &&
+          state.loading === 'pending'
+        ) {
+          const stateSubset = state.expenses.filter(
+            (elem) => elem.id !== action.payload.id
+          );
+          const changes = { id: action.payload.id, ...action.payload.change };
+          state.expenses = [...stateSubset, changes];
+          state.currentRequestId = undefined;
+          state.loading = 'idle';
+        }
+      })
+      .addCase(editExpense.rejected, (state, action) => {
+        const { requestId } = action.meta;
+        if (
+          state.currentRequestId === requestId &&
+          state.loading === 'pending'
+        ) {
+          state.currentRequestId = undefined;
+          state.loading = 'idle';
+          state.error = action.error;
+        }
+      });
+  },
 });
 
 export const {
-  addExpense,
-  editExpense,
-  deleteExpense,
   setTextFilter,
   setExpenseID,
   resetExpenseID,
   setSortBy,
   setStartDate,
   setEndDate,
-  clearExpenses,
   setDateFilter,
   resetDateFilter,
   setIdFilter,
@@ -93,6 +231,8 @@ export const {
 } = expensesSlice.actions;
 
 export const selectAllExpenses = (state) => state.expenses.expenses;
+export const selectExpenseQueryState = (state) => state.expenses.loading;
+export const selectExpenseQueryError = (state) => state.expenses.error;
 
 export const selectExpensesSubset = (state) => {
   if (state.expenses.filters.filterById) {

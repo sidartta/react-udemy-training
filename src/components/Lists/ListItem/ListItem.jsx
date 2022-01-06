@@ -24,7 +24,7 @@ export const ExpenseListItem = ({ id, category, payee, amount }) => {
       className={'expense-list__item'}
       onClick={selectExpenseById}
     >
-      <li>
+      <li key={id}>
         {category} -- {payee} -- {amount}$
       </li>
     </NavLink>
