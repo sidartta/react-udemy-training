@@ -7,6 +7,14 @@ import {
   isAfter,
   isBefore,
 } from 'date-fns';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { push, ref, set, get, remove, child, update } from 'firebase/database';
+
+// Internal imports
+import db from '@database/firebase.js';
+
+// Database references
+const expensesRef = ref(db, 'expenses');
 
 // Actions
 export const filterListItems = (list, criteria) => {
@@ -67,3 +75,68 @@ export const sortByListItems = (list, criteria = '') => {
       return list;
   }
 };
+
+// Async Actions
+export const addExpensetoDB = createAsyncThunk(
+  'expenses/add',
+  async (expense, { getState, requestId }) => {
+    const { currentRequestId, loading } = getState().expenses;
+    if (currentRequestId !== requestId || loading !== 'pending') {
+      return;
+    }
+    const newExpenseRef = push(expensesRef);
+    await set(newExpenseRef, expense);
+    return { id: newExpenseRef.key, ...expense };
+  }
+);
+
+export const initializeExpenses = createAsyncThunk(
+  'expenses/initialize',
+  async (_, { getState, requestId }) => {
+    const { currentRequestId, loading } = getState().expenses;
+    if (currentRequestId !== requestId || loading !== 'pending') {
+      return;
+    }
+    const expenses = [];
+    const response = await get(expensesRef);
+    response.forEach((elem) => {
+      expenses.push({ id: elem.key, ...elem.val() });
+    });
+    return expenses;
+  }
+);
+
+export const clearAllExpenses = createAsyncThunk(
+  'expenses/clearAll',
+  async (_, { getState, requestId }) => {
+    const { currentRequestId, loading } = getState().expenses;
+    if (currentRequestId !== requestId || loading !== 'pending') {
+      return;
+    }
+    return await remove(expensesRef);
+  }
+);
+
+export const deleteExpense = createAsyncThunk(
+  'expenses/delete',
+  async (id, { getState, requestId }) => {
+    const { currentRequestId, loading } = getState().expenses;
+    if (currentRequestId !== requestId || loading !== 'pending') {
+      return;
+    }
+    await remove(child(expensesRef, id));
+    return id;
+  }
+);
+
+export const editExpense = createAsyncThunk(
+  'expenses/edit',
+  async (changes, { getState, requestId }) => {
+    const { currentRequestId, loading } = getState().expenses;
+    if (currentRequestId !== requestId || loading !== 'pending') {
+      return;
+    }
+    await update(child(expensesRef, changes.id), changes.change);
+    return changes;
+  }
+);

@@ -1,10 +1,10 @@
 // External imports
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // Internal imports
-import { deleteExpense } from '@store/expenses/expenses.slice.js';
+import { deleteExpense } from '@store/expenses/expenses.actions';
 import { LocalStorageService } from '@services/index';
 
 // Assets
@@ -22,10 +22,15 @@ export const ExpenseDetailsWidget = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleDelete = () => {
-    dispatch(deleteExpense(id));
-    LocalStorageService.remove('expenses', id);
-    navigate('/view');
+  const handleDelete = async () => {
+    try {
+      await dispatch(deleteExpense(id));
+      navigate('/view', { replace: true });
+    } catch (err) {
+      console.error(
+        `There was an issue while deleting the expense 💥. Error is : ${err.message}`
+      );
+    }
   };
 
   return (

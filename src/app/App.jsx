@@ -1,7 +1,8 @@
 'use strict';
 // External imports
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 // Local imports
 import {
@@ -13,11 +14,23 @@ import {
   HelpPage,
   NotFoundPage,
 } from '@views/routes.js';
+import '@database/firebase';
+import { initializeExpenses } from '@store/expenses/expenses.actions';
 
 // Assets
 import '@app/App.scss';
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    try {
+      dispatch(initializeExpenses());
+    } catch (err) {
+      `There was an issue loading your expenses 💥. Error is : ${err.message}`;
+    }
+  }, []);
+
   return (
     <>
       <BrowserRouter>

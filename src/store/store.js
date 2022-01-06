@@ -1,4 +1,3 @@
-'use-strict';
 // External imports
 import { configureStore } from '@reduxjs/toolkit';
 
