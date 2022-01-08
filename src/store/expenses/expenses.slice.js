@@ -1,5 +1,5 @@
 // External imports
-import { createAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { formatISO, parseISO } from 'date-fns';
 
 // Internal imports
@@ -14,7 +14,7 @@ import {
 } from './expenses.actions';
 
 // Initialization of state
-export const initialState = {
+export const INITIAL_STATE = {
   expenses: [],
   loading: 'idle',
   currentRequestId: undefined,
@@ -33,7 +33,7 @@ export const initialState = {
 // Expenses sclice definition
 const expensesSlice = createSlice({
   name: 'expenses',
-  initialState,
+  initialState: INITIAL_STATE,
   reducers: {
     setTextFilter: (state, action = '') => {
       state.filters.text = action.payload;

@@ -14,20 +14,29 @@ import { addExpensetoDB, editExpense } from '@store/expenses/expenses.actions';
 import '@app/App.jsx';
 
 // Components
-const DefaultState = {
+const DEFAULT_STATE = {
   category: 'Home',
   payee: '',
   amount: 0,
   createdAt: formatISO(new Date(), { representation: 'date' }),
 };
+const textDisplayConfig = (type = 'ADD') => {
+  if (type === 'ADD') {
+    return { legend: 'Add new expense', button: 'Add expense' };
+  } else if (type === 'EDIT') {
+    return { legend: 'Edit expense', button: 'Save Expense and Exit' };
+  } else {
+    throw new Error('Invalid type provided to text config function.');
+  }
+};
 
 export const ExpenseForm = (props) => {
   const {
     type = 'ADD',
-    category = 'Home',
-    payee = '',
-    amount = 0,
-    createdAt = formatISO(new Date(), { representation: 'date' }),
+    category = DEFAULT_STATE.category,
+    payee = DEFAULT_STATE.payee,
+    amount = DEFAULT_STATE.amount,
+    createdAt = DEFAULT_STATE.createdAt,
   } = props;
 
   const { id } = useParams();
@@ -42,9 +51,7 @@ export const ExpenseForm = (props) => {
   });
   const [addedNotification, setAddedNotification] = useState(false);
 
-  const LEGEND_TEXT = type === 'ADD' ? 'Add new expense' : 'Edit expense';
-  const BUTTON_TEXT = type === 'ADD' ? 'Add expense' : 'Save Expense and Exit';
-  const textProps = { legend: LEGEND_TEXT, button: BUTTON_TEXT };
+  const textProps = textDisplayConfig(type);
 
   const handleSubmit = async (e) => {
     try {
@@ -52,7 +59,7 @@ export const ExpenseForm = (props) => {
       if (type === 'ADD') {
         await dispatch(addExpensetoDB(expense));
         setAddedNotification(true);
-        setExpense(DefaultState);
+        setExpense(DEFAULT_STATE);
         setTimeout(() => setAddedNotification(false), 5000);
       } else {
         await dispatch(editExpense({ id, change: expense }));
