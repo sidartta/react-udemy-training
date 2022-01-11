@@ -1,12 +1,12 @@
-'use strict';
 // External imports
-import React, { useEffect } from 'react';
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+
+// Internal imports
 
 // Local imports
 import {
-  Root,
+  Layout,
   DashboardPage,
   AddExpensePage,
   ViewExpensePage,
@@ -14,37 +14,24 @@ import {
   HelpPage,
   NotFoundPage,
 } from '@views/routes.js';
-import '@database/firebase';
-import { initializeExpenses } from '@store/expenses/expenses.actions';
 
 // Assets
 import '@app/App.scss';
 
+// Component
 const App = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    try {
-      dispatch(initializeExpenses());
-    } catch (err) {
-      `There was an issue loading your expenses 💥. Error is : ${err.message}`;
-    }
-  }, []);
-
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Root />}>
-            <Route index element={<DashboardPage />} />
-            <Route path="add" element={<AddExpensePage />} />
-            <Route path="view/" element={<ViewExpensePage />} />
-            <Route path="view/:id" element={<ExpenseDetailsView />} />
-            <Route path="help" element={<HelpPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/add" element={<AddExpensePage />} />
+          <Route path="/view/" element={<ViewExpensePage />} />
+          <Route path="/view/:id" element={<ExpenseDetailsView />} />
+          <Route path="/help" element={<HelpPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>
     </>
   );
 };

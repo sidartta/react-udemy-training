@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -16,16 +17,11 @@ const app = initializeApp(firebaseConfig);
 
 const db = getDatabase(app);
 
-export default db;
+export const provider = new GoogleAuthProvider();
 
-// apiKey: 'AIzaSyAVyWYNoP8jbgwkMJR6xewyzQbAGj1LkEA',
-//   authDomain: 'my-expensify-35a1b.firebaseapp.com',
-//   databaseURL: 'https://my-expensify-35a1b-default-rtdb.firebaseio.com',
-//   projectId: 'my-expensify-35a1b',
-//   storageBucket: 'my-expensify-35a1b.appspot.com',
-//   messagingSenderId: '929975208857',
-//   appId: '1:929975208857:web:7c9911963be09929ebe108',
-//   measurementId: 'G-T740YPQTEH',
+export const auth = getAuth(app);
+
+export default db;
 
 // // Watch for expense node changes
 // const cancelExpensesSubscription = onValue(expensesRef, (snapshot) => {

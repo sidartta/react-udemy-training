@@ -1,3 +1,3 @@
-import { LocalStorageService } from './LocalStorage/LocalStorage.service'
+import { LocalStorageService } from './LocalStorage/LocalStorage.service';
 
-export { LocalStorageService }
+export { LocalStorageService };

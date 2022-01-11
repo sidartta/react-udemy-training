@@ -5,7 +5,6 @@ import { Link, useNavigate } from 'react-router-dom';
 
 // Internal imports
 import { deleteExpense } from '@store/expenses/expenses.actions';
-import { LocalStorageService } from '@services/index';
 
 // Assets
 import '@app/App.jsx';

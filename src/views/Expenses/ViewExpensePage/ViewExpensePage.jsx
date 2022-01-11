@@ -35,7 +35,7 @@ const ViewExpensePage = () => {
   const handleDeleteAll = async () => {
     try {
       dispatch(clearAllExpenses());
-    } catch {
+    } catch (err) {
       console.error(
         `There was an issue while clearing the expenses 💥. Error is : ${err.message}`
       );
