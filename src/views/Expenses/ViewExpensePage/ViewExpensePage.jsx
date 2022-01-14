@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { formatISO } from 'date-fns';
+import Loader from 'react-loader-spinner';
 
 // Internal imports
 import { ExpenseListItem } from '@components/Lists/ListItem/ListItem.jsx';
@@ -51,11 +52,17 @@ const ViewExpensePage = () => {
       >
         Delete All
       </button>
-      <ul className="expenseListContainer">
-        {expenses.map((expense) => (
-          <ExpenseListItem key={expense.id} {...expense} />
-        ))}
-      </ul>
+      <div className="expenseListContainer">
+        {expenses.length !== 0 ? (
+          <ul>
+            {expenses.map((expense) => (
+              <ExpenseListItem key={expense.id} {...expense} />
+            ))}
+          </ul>
+        ) : (
+          <Loader type="Grid" color="white" />
+        )}
+      </div>
       <fieldset className="filtersContainer">
         <legend>Expense filters</legend>
         <div>

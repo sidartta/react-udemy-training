@@ -4,9 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Internal imports
-import { selectUserAthStatus, selectUserID } from '@store/auth/auth.slice';
+import {
+  selectUserAthStatus,
+  selectUserID,
+  handleLoginFailure,
+  handleLoginSuccess,
+} from '@store/auth/auth.slice';
 import { startGoogleLogOut, startGoogleLogIn } from '@store/auth/auth.actions';
-import { handleLoginFailure, handleLoginSuccess } from '@store/auth/auth.slice';
+import { initializeExpenses } from '@store/expenses/expenses.actions';
 
 // Component
 function AuthStatus() {
@@ -18,10 +23,9 @@ function AuthStatus() {
   const handleSignOut = async () => {
     try {
       await dispatch(startGoogleLogOut());
+      await dispatch(initializeExpenses('reset'));
     } catch (err) {
       console.error(err);
-    } finally {
-      navigate('/');
     }
   };
 
@@ -29,6 +33,7 @@ function AuthStatus() {
     try {
       const result = await dispatch(startGoogleLogIn());
       dispatch(handleLoginSuccess(result));
+      await dispatch(initializeExpenses('set'));
       navigate('/dashboard');
     } catch (err) {
       dispatch(handleLoginFailure(err));
@@ -41,7 +46,7 @@ function AuthStatus() {
     <>
       {isAuthenticated ? (
         <p>
-          Welcome {userID}! <button onClick={handleSignOut}>Log out</button>
+          Welcome {userID}! -- <button onClick={handleSignOut}>Log out</button>
         </p>
       ) : (
         <button onClick={handleLogIn}>Log In</button>

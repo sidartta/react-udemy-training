@@ -9,12 +9,10 @@ import {
 } from 'date-fns';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { push, ref, set, get, remove, child, update } from 'firebase/database';
+import { auth } from '@database/firebase';
 
 // Internal imports
 import db from '@database/firebase.js';
-
-// Database references
-const expensesRef = ref(db, 'expenses');
 
 // Actions
 export const filterListItems = (list, criteria) => {
@@ -77,32 +75,40 @@ export const sortByListItems = (list, criteria = '') => {
 };
 
 // Async Actions
-export const addExpensetoDB = createAsyncThunk(
-  'expenses/add',
-  async (expense, { getState, requestId }) => {
-    const { currentRequestId, loading } = getState().expenses;
-    if (currentRequestId !== requestId || loading !== 'pending') {
-      return;
-    }
-    const newExpenseRef = push(expensesRef);
-    await set(newExpenseRef, expense);
-    return { id: newExpenseRef.key, ...expense };
-  }
-);
-
 export const initializeExpenses = createAsyncThunk(
   'expenses/initialize',
-  async (_, { getState, requestId }) => {
+  async (type = 'set', { getState, requestId }) => {
     const { currentRequestId, loading } = getState().expenses;
+    const uid = auth.currentUser.uid;
     if (currentRequestId !== requestId || loading !== 'pending') {
       return;
     }
     const expenses = [];
-    const response = await get(expensesRef);
-    response.forEach((elem) => {
-      expenses.push({ id: elem.key, ...elem.val() });
-    });
-    return expenses;
+    if (type === 'reset') {
+      return expenses;
+    } else if (type === 'set') {
+      const expensesRef = ref(db, 'users/' + uid + '/expenses');
+      const response = await get(expensesRef);
+      response.forEach((elem) => {
+        expenses.push({ id: elem.key, ...elem.val() });
+      });
+      return expenses;
+    }
+  }
+);
+
+export const addExpensetoDB = createAsyncThunk(
+  'expenses/add',
+  async (expense = null, { getState, requestId }) => {
+    const { currentRequestId, loading } = getState().expenses;
+    const uid = auth.currentUser.uid;
+    if (currentRequestId !== requestId || loading !== 'pending') {
+      return;
+    }
+    const expensesRef = ref(db, 'users/' + uid + '/expenses');
+    const newExpenseRef = push(expensesRef);
+    await set(newExpenseRef, expense);
+    return { id: newExpenseRef.key, ...expense };
   }
 );
 
@@ -110,33 +116,43 @@ export const clearAllExpenses = createAsyncThunk(
   'expenses/clearAll',
   async (_, { getState, requestId }) => {
     const { currentRequestId, loading } = getState().expenses;
+    const uid = auth.currentUser.uid;
     if (currentRequestId !== requestId || loading !== 'pending') {
       return;
     }
+    const expensesRef = ref(db, 'users/' + uid + '/expenses');
     return await remove(expensesRef);
   }
 );
 
 export const deleteExpense = createAsyncThunk(
   'expenses/delete',
-  async (id, { getState, requestId }) => {
+  async (id = undefined, { getState, requestId }) => {
     const { currentRequestId, loading } = getState().expenses;
+    const uid = auth.currentUser.uid;
     if (currentRequestId !== requestId || loading !== 'pending') {
       return;
     }
-    await remove(child(expensesRef, id));
+    const expenseRef = ref(db, 'users/' + uid + 'expenses/' + id);
+    await remove(expenseRef);
     return id;
   }
 );
 
 export const editExpense = createAsyncThunk(
   'expenses/edit',
-  async (changes, { getState, requestId }) => {
+  async (changes = null, { getState, requestId }) => {
     const { currentRequestId, loading } = getState().expenses;
+    const uid = auth.currentUser.uid;
     if (currentRequestId !== requestId || loading !== 'pending') {
       return;
     }
-    await update(child(expensesRef, changes.id), changes.change);
+    const expenseRef = child(
+      ref(db, 'users/' + uid + '/expenses/'),
+      changes.id
+    );
+    console.log(expenseRef);
+    await update(expenseRef, changes.change);
     return changes;
   }
 );

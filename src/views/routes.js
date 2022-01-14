@@ -6,6 +6,7 @@ import ViewExpensePage from '@views/Expenses/ViewExpensePage/ViewExpensePage.jsx
 import ExpenseDetailsView from '@views/Expenses/ViewExpensePage/ExpenseDetailsView/ExpenseDetailsView.jsx';
 import HelpPage from '@views/HelpPage/HelpPage.jsx';
 import NotFoundPage from '@views/NotFoundPage/NotFoundPage.jsx';
+import PrivateRoute from '@views/PrivateRoute';
 
 // Export of all app views
 export {
@@ -16,4 +17,5 @@ export {
   ExpenseDetailsView,
   HelpPage,
   NotFoundPage,
+  PrivateRoute,
 };

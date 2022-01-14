@@ -4,9 +4,9 @@ import { Outlet } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 // Internal imports
-import { selectUserAthStatus } from '@store/auth/auth.slice';
-import Header from '@components/Header/Header.jsx';
 import AuthStatus from '@components/Auth/AuthStatus.jsx';
+import Header from '@components/Header/Header.jsx';
+import { selectUserAthStatus } from '@store/auth/auth.slice';
 
 // Assets
 import '@app/App.scss';
@@ -17,13 +17,11 @@ const Layout = () => {
 
   return (
     <>
-      <div>
-        <h1>Expensify</h1>
-        <h3>Smart & Simple Expenses Management</h3>
-        <AuthStatus />
-      </div>
+      <h1>Expensify</h1>
+      <h3>Smart & Simple Expenses Management</h3>
+      <AuthStatus />
       {isAuthenticated && <Header />}
-      {isAuthenticated && <Outlet />}
+      <Outlet />
     </>
   );
 };

@@ -1,9 +1,10 @@
 .expenseListContainer {
+  margin: 10px 0;
 }
 
 .filtersContainer {
   display: flex;
   max-width: 1000px;
-  align-items: top;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: space-around;
 }

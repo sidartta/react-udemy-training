@@ -1,28 +1,28 @@
 // External imports
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 // Local imports
-import { initializeExpenses } from '@store/expenses/expenses.actions';
+import { selectExpensesSubset } from '@store/expenses/expenses.slice.js';
 
 // Assets
 import '@app/App.scss';
+const reducer = (previousValue, currentValue) => previousValue + currentValue;
 
 // Component
 const DashboardPage = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    try {
-      dispatch(initializeExpenses());
-    } catch (err) {
-      `There was an issue loading your expenses 💥. Error is : ${err.message}`;
-    }
-  }, []);
+  const expenses = useSelector(selectExpensesSubset);
 
   return (
     <>
-      <p>This is the Dashboard page</p>
+      <h1>
+        The total of your expenses is : $
+        {expenses.length !== 0 ? (
+          expenses.map((elem) => parseInt(elem.amount)).reduce(reducer)
+        ) : (
+          <span>... loading</span>
+        )}
+      </h1>
     </>
   );
 };

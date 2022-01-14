@@ -9,6 +9,7 @@ import Loader from 'react-loader-spinner';
 import { categoriesSelector } from '@store/categories/categories.slice.js';
 import { BasicForm } from '@components/Forms/BasicForm/BasicForm.jsx';
 import { addExpensetoDB, editExpense } from '@store/expenses/expenses.actions';
+import { selectUserID } from '@store/auth/auth.slice';
 
 // Assets
 import '@app/App.jsx';
@@ -42,6 +43,7 @@ export const ExpenseForm = (props) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.expenses.loading);
+  const uid = useSelector(selectUserID);
   const { categories } = useSelector(categoriesSelector);
   const [expense, setExpense] = useState({
     category,
