@@ -1,62 +1,25 @@
 // External imports
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { MdSpaceDashboard, MdOutlineHelpOutline } from 'react-icons/md';
+import { IoMdAddCircle } from 'react-icons/io';
+import { FaCashRegister } from 'react-icons/fa';
 
 // Internal imports
-// ...
-
-// Assets
-import '@app/App.scss';
+import UserStatus from '@components/UserStatus/UserStatus.jsx';
+import { HeaderStyles } from './Header.styles';
+import HeaderItem from './HeaderItem.jsx';
 
 // Component
 const Header = () => {
   return (
-    <>
-      <nav style={{ marginBottom: '40px' }}>
-        <ul style={{ display: 'flex', listStyle: 'none' }}>
-          <li>
-            <NavLink
-              to="/dashboard"
-              className={({ isActive }) =>
-                isActive ? 'nav-link nav-link--active' : 'nav-link'
-              }
-            >
-              Dashboard
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/add"
-              className={({ isActive }) =>
-                isActive ? 'nav-link nav-link--active' : 'nav-link'
-              }
-            >
-              Add Expense
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/view"
-              className={({ isActive }) =>
-                isActive ? 'nav-link nav-link--active' : 'nav-link'
-              }
-            >
-              View Expenses
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/help"
-              className={({ isActive }) =>
-                isActive ? 'nav-link nav-link--active' : 'nav-link'
-              }
-            >
-              Need Help ?
-            </NavLink>
-          </li>
-        </ul>
-      </nav>
-    </>
+    <HeaderStyles>
+      <HeaderItem text={'Dashboard'} icon={<MdSpaceDashboard />} target={'/dashboard'} />
+      <HeaderItem text={'View Expenses'} icon={<FaCashRegister />} target={'/view'} />
+      <HeaderItem text={'Add Expense'} icon={<IoMdAddCircle />} target={'/add'} focused={true} />
+      <HeaderItem text={'Need Help ?'} icon={<MdOutlineHelpOutline />} target={'/help'} />
+      <HeaderItem isUserHandle={true} />
+    </HeaderStyles>
   );
 };
 

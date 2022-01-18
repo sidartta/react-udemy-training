@@ -5,8 +5,8 @@ import React from 'react';
 import { ExpenseForm } from '@components/Forms/ExpenseForm/ExpenseForm.jsx';
 
 // Assets
-import '@app/App.scss';
 
+// Component
 const AddExpensePage = () => {
   return (
     <>

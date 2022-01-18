@@ -1,28 +1,39 @@
 // External imports
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
 import { useSelector } from 'react-redux';
 
 // Internal imports
-import AuthStatus from '@components/Auth/AuthStatus.jsx';
+import Footer from '@components/Footer/Footer.jsx';
+import AppGlobalStyles, {
+  MainContainer,
+  TitleContainer,
+} from './Layout.styles';
 import Header from '@components/Header/Header.jsx';
-import { selectUserAthStatus } from '@store/auth/auth.slice';
-
-// Assets
-import '@app/App.scss';
+import { theme } from '@assets/theme';
 
 // Component
 const Layout = () => {
-  const isAuthenticated = useSelector(selectUserAthStatus);
+  const [themeApplied, setThemeApplied] = useState(theme.light);
+  const isAuthenticated = useSelector((state) => state.auth.isAuth);
 
   return (
-    <>
-      <h1>Expensify</h1>
-      <h3>Smart & Simple Expenses Management</h3>
-      <AuthStatus />
-      {isAuthenticated && <Header />}
-      <Outlet />
-    </>
+    <ThemeProvider theme={themeApplied}>
+      <AppGlobalStyles />
+      <MainContainer>
+        {!isAuthenticated ? (
+          <TitleContainer>
+            <h1>Expensify</h1>
+            <h3>Smart & Simple Expenses Management</h3>
+          </TitleContainer>
+        ) : (
+          <Header />
+        )}
+        <Outlet />
+        <Footer />
+      </MainContainer>
+    </ThemeProvider>
   );
 };
 

@@ -2,7 +2,6 @@
 import React from 'react';
 
 // Assets
-import '@app/App.scss';
 
 // Component
 const NotFoundPage = () => (

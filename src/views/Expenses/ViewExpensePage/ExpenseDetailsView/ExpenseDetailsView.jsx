@@ -12,7 +12,6 @@ import { ExpenseForm } from '@components/Forms/ExpenseForm/ExpenseForm.jsx';
 import { ExpenseDetailsWidget } from '@components/Widgets/ExpenseDetailsWidget.jsx';
 
 // Assets
-import '@app/App.scss';
 
 // Components
 const ExpenseDetailsView = () => {

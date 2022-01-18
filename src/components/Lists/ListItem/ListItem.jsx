@@ -7,7 +7,6 @@ import { useDispatch } from 'react-redux';
 import { setExpenseID, setIdFilter } from '@store/expenses/expenses.slice.js';
 
 // Assets
-import '@app/App.jsx';
 
 // Components
 export const ExpenseListItem = ({ id, category, payee, amount }) => {

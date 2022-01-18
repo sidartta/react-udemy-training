@@ -7,7 +7,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { deleteExpense } from '@store/expenses/expenses.actions';
 
 // Assets
-import '@app/App.jsx';
 
 // Components
 export const ExpenseDetailsWidget = ({

@@ -12,7 +12,6 @@ import { addExpensetoDB, editExpense } from '@store/expenses/expenses.actions';
 import { selectUserID } from '@store/auth/auth.slice';
 
 // Assets
-import '@app/App.jsx';
 
 // Components
 const DEFAULT_STATE = {

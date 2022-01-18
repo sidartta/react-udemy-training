@@ -6,15 +6,18 @@ import { useSelector } from 'react-redux';
 // Internal imports
 import { selectUserAthStatus } from '@store/auth/auth.slice';
 
+// Assets
+
 // Component
-const PrivateRoute = ({ children }) => {
+const PublicRoute = ({ children }) => {
   const isAuthenticated = useSelector(selectUserAthStatus);
   const location = useLocation();
 
-  if (!isAuthenticated) {
-    return <Navigate to="/" state={{ from: location }} replace />;
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" state={{ from: location }} replace />;
   }
+
   return <>{children}</>;
 };
 
-export default PrivateRoute;
+export default PublicRoute;

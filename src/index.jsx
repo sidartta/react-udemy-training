@@ -6,9 +6,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { getAuth } from 'firebase/auth';
 
 // Local imports
+import App from '@app/App.jsx';
 import 'normalize.css/normalize.css';
 import { store } from '@store/store';
-import App from '@app/App.jsx';
 
 // Constants definition
 const MOUNT_NODE = document.getElementById('root');
