@@ -13,7 +13,7 @@ const Footer = () => {
       </a>
       <div className="legal">
         <span>
-          &copy; 2022 by Mohamed Khalf.
+          &copy; 2022 by Mohamed Khalf
           <br />
           All rights reserved.
         </span>

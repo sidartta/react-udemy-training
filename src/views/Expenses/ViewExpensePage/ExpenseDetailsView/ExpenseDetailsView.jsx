@@ -1,17 +1,11 @@
 // External imports
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-// Internal imports
-import {
-  selectExpensesSubset,
-  resetIdFilter,
-  resetExpenseID,
-} from '@store/expenses/expenses.slice.js';
-import { ExpenseForm } from '@components/Forms/ExpenseForm/ExpenseForm.jsx';
+// Local imports
+import { selectExpensesSubset } from '@store/expenses/expenses.slice.js';
+import { ExpenseForm } from '@components/Forms/ExpenseForm.jsx';
 import { ExpenseDetailsWidget } from '@components/Widgets/ExpenseDetailsWidget.jsx';
-
-// Assets
 
 // Components
 const ExpenseDetailsView = () => {

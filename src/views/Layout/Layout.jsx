@@ -24,7 +24,9 @@ const Layout = () => {
       <MainContainer>
         {!isAuthenticated ? (
           <TitleContainer>
-            <h1>Expensify</h1>
+            <h1>
+              <span>X</span>pensify
+            </h1>
             <h3>Smart & Simple Expenses Management</h3>
           </TitleContainer>
         ) : (

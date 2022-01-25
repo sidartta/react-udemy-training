@@ -3,7 +3,7 @@ import React from 'react';
 import { FaGoogle } from 'react-icons/fa';
 
 // Local imports
-import { LoginButtonStyles } from './LoginButton.styles';
+import { LoginButtonStyles } from './_Buttons.styles';
 
 // Assets
 const icons = {
@@ -15,7 +15,7 @@ const LoginButton = (props) => {
   return (
     <LoginButtonStyles onClick={props.handleClick}>
       <h1 className="icon">{icons[props.provider]}</h1>
-      <h3 className="text">Log in with Google</h3>
+      <span className="text">Log in with Google</span>
     </LoginButtonStyles>
   );
 };

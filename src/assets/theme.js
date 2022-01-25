@@ -1,45 +1,30 @@
-// Constants
-export const darkPrimaryColor = '#0097A7';
-export const lightPrimaryColor = '#B2EBF2';
-export const primaryColor = '#00BCD4';
-export const textIconsColor = '#FFFFFF';
-export const accentColor = '#448AFF';
-export const primaryTextColor = '#212121';
-export const secondaryTextColor = '#757575';
-export const dividerColor = '#BDBDBD';
-
-export const MOBILE = '768px';
+// Brand color definition
+const brand = {
+  hue: 200,
+  saturation: 1,
+  lightness: 0.5,
+};
 
 // Theme
 export const theme = {
-  dark: {
-    colors: {
-      body: darkPrimaryColor,
-      footer: primaryColor,
-      header: darkPrimaryColor,
-      headerTitle: lightPrimaryColor,
-      buttonBorder: dividerColor,
-      buttonText: textIconsColor,
-      buttonBg: lightPrimaryColor,
-      buttonTextHover: textIconsColor,
-      buttonBgHover: lightPrimaryColor,
-      footerBg: lightPrimaryColor,
-      headerBg: lightPrimaryColor,
+  light: {
+    palette: {
+      brand: `hsl(${brand.hue} ${brand.saturation * 100}% ${
+        brand.lightness * 100
+      }%)`,
+      text1: `hsl(${brand.hue} ${brand.saturation * 100}% 10%)`,
+      text2: `hsl(${brand.hue} 30% 30%)`,
+      surface1: `hsl(${brand.hue} 25% 90%)`,
+      surface2: `hsl(${brand.hue} 20% 99%)`,
+      surface3: `hsl(${brand.hue} 20% 92%)`,
+      surface4: `hsl(${brand.hue} 20% 85%)`,
+      surfaceShadow: `${brand.hue} 10% ${(brand.lightness * 100) / 5}%)`,
+      shadowStrength: 0.02,
     },
   },
-  light: {
-    colors: {
-      body: lightPrimaryColor,
-      footer: primaryColor,
-      header: lightPrimaryColor,
-      headerTitle: primaryTextColor,
-      buttonBorder: dividerColor,
-      buttonText: primaryTextColor,
-      buttonBg: darkPrimaryColor,
-      buttonTextHover: lightPrimaryColor,
-      buttonBgHover: accentColor,
-      footerBg: darkPrimaryColor,
-      headerBg: darkPrimaryColor,
-    },
+  dark: {
+    palette: {},
   },
 };
+
+export const MOBILE = '768px';

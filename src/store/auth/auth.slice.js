@@ -1,7 +1,7 @@
 // External imports
 import { createSlice } from '@reduxjs/toolkit';
 
-// Internal imports
+// Local imports
 import { startGoogleLogIn, startGoogleLogOut } from './auth.actions';
 import { LocalStorageService } from '@services/index';
 

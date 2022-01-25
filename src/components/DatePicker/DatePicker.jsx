@@ -1,9 +1,8 @@
 // External imports
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
-import { formatISO } from 'date-fns/esm';
 
-// Internal imports
+// Local imports
 import './DatePicker.styles';
 
 // Component
@@ -55,14 +54,4 @@ export const DatePickerRange = ({
       </button>
     </>
   );
-};
-
-export const SingleDatePicker = (props) => {
-  const { setDateAction, initialDate } = props;
-  const [startDate, setStartDate] = useState(initialDate);
-  const onChange = (date) => {
-    setStartDate(date);
-    setDateAction(formatISO(date, { representation: 'date' }));
-  };
-  return <DatePicker selected={startDate} onChange={onChange} />;
 };

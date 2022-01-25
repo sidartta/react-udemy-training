@@ -2,7 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { formatISO, parseISO } from 'date-fns';
 
-// Internal imports
+// Local imports
 import {
   filterListItems,
   sortByListItems,
@@ -23,7 +23,7 @@ export const INITIAL_STATE = {
   filters: {
     text: '',
     sortBy: '',
-    startDate: formatISO(new Date(), { representation: 'date' }),
+    startDate: formatISO(new Date()),
     endDate: null,
     filterByDate: false,
     expenseID: '',

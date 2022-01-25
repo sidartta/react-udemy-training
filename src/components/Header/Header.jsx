@@ -1,12 +1,10 @@
 // External imports
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import { MdSpaceDashboard, MdOutlineHelpOutline } from 'react-icons/md';
 import { IoMdAddCircle } from 'react-icons/io';
 import { FaCashRegister } from 'react-icons/fa';
 
 // Internal imports
-import UserStatus from '@components/UserStatus/UserStatus.jsx';
 import { HeaderStyles } from './Header.styles';
 import HeaderItem from './HeaderItem.jsx';
 

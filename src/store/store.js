@@ -2,7 +2,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { getAuth } from 'firebase/auth';
 
-// Internal imports
+// Local imports
 import { rootReducer } from '@store/rootReducer';
 import { initializeExpenses } from '@store/expenses/expenses.actions';
 

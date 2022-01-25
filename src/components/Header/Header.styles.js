@@ -2,19 +2,15 @@
 import styled from 'styled-components';
 
 // Local imports
-import {
-  MOBILE,
-  headerBg,
-  accentColor,
-  textIconsColor,
-  secondaryTextColor,
-} from '@assets/theme';
+import { MOBILE } from '@assets/theme';
 
 // Styled Component
 export const HeaderStyles = styled.nav`
+  position: relative;
+  top: 0;
   display: flex;
 
-  background-color: ${(props) => props.theme.colors.headerBg};
+  background-color: ${(props) => props.theme.palette.surface2};
 
   @media only screen and (max-width: ${MOBILE}) {
     align-items: center;

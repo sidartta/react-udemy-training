@@ -3,10 +3,8 @@ import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-// Internal imports
+// Local imports
 import { selectUserAthStatus } from '@store/auth/auth.slice';
-
-// Assets
 
 // Component
 const PublicRoute = ({ children }) => {
@@ -17,7 +15,7 @@ const PublicRoute = ({ children }) => {
     return <Navigate to="/dashboard" state={{ from: location }} replace />;
   }
 
-  return <>{children}</>;
+  return <> {children} </>;
 };
 
 export default PublicRoute;

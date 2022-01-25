@@ -2,7 +2,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-// Internal imports
+// Local imports
 import UserStatus from '@components/UserStatus/UserStatus.jsx';
 import { HeaderItemStyles } from './HeaderItem.styles';
 
@@ -15,13 +15,15 @@ const HeaderItem = ({ text, target, icon, isUserHandle, focused }) => {
       {!isUserHandle ? (
         <NavLink
           to={target}
-          className={({ isActive }) => (isActive ? 'navlink navlink--active' : 'navlink')}
+          className={({ isActive }) =>
+            isActive ? 'navLink navLink--active' : 'navLink'
+          }
         >
-          <h1 className="navicon">{icon}</h1>
-          <span className="navtext">{text}</span>
+          <h1 className="navIcon">{icon}</h1>
+          <span className="navText">{text}</span>
         </NavLink>
       ) : (
-        <UserStatus iconClass={'navicon'} textClass={'navtext'} />
+        <UserStatus iconClass={'navIcon'} textClass={'navText'} />
       )}
     </HeaderItemStyles>
   );

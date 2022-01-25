@@ -1,15 +1,13 @@
 // External imports
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { formatISO } from 'date-fns';
-import Loader from 'react-loader-spinner';
+import AlertDialogSlide from '@components/Modal/ConfirmationModal.jsx';
 
 // Internal imports
-import { ExpenseListItem } from '@components/Lists/ListItem/ListItem.jsx';
+import { DataTableBase } from '@components/Table/Table.jsx';
 import {
   selectExpensesSubset,
-  setTextFilter,
-  setSortBy,
   setStartDate,
   setEndDate,
   setDateFilter,
@@ -18,90 +16,100 @@ import {
   resetExpenseID,
 } from '@store/expenses/expenses.slice.js';
 import { DatePickerRange } from '@components/DatePicker/DatePicker.jsx';
-import { clearAllExpenses } from '@store/expenses/expenses.actions';
+import { clearAllExpenses, deleteExpense } from '@store/expenses/expenses.actions';
 
-// Assets
-import './ViewExpensePage.scss';
+// Definitions
+const columns = [
+  {
+    name: 'Payee',
+    selector: (row) => row.payee,
+    sortable: true,
+    reorder: true,
+    width: 'auto',
+  },
+  {
+    name: 'Category',
+    selector: (row) => row.category,
+    hide: 'sm',
+    reorder: true,
+    width: 'auto',
+  },
+  {
+    name: 'Amount ($)',
+    selector: (row) => row.amount,
+    sortable: true,
+    reorder: true,
+    width: 'auto',
+  },
+  {
+    name: 'Date',
+    selector: (row) => row.createdAt.split('T')[0],
+    sortable: true,
+    reorder: true,
+    width: 'auto',
+  },
+];
 
 // Component
 const ViewExpensePage = () => {
   const expenses = useSelector(selectExpensesSubset);
+
+  const loading = useSelector((state) => state.expenses.loading);
   const dispatch = useDispatch();
+
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [toggleCleared, setToggleCleared] = useState(false);
 
   useEffect(() => {
     dispatch(resetIdFilter());
     dispatch(resetExpenseID());
   }, []);
 
-  const handleDeleteAll = async () => {
-    try {
-      dispatch(clearAllExpenses());
-    } catch (err) {
-      console.error(
-        `There was an issue while clearing the expenses 💥. Error is : ${err.message}`
-      );
-    }
-  };
+  const handleRowSelected = useCallback((state) => {
+    setSelectedRows(state.selectedRows);
+  }, []);
+
+  const contextActions = useMemo(() => {
+    const handleDelete = async () => {
+      try {
+        setToggleCleared(!toggleCleared);
+        const selectedRowsIDs = selectedRows.map((elem) => elem.id);
+        if (selectedRowsIDs.length === expenses.length) {
+          await dispatch(clearAllExpenses());
+        } else {
+          for (const id of selectedRowsIDs) {
+            await dispatch(deleteExpense(id));
+          }
+        }
+      } catch (err) {
+        console.error(
+          `There was an issue while deleting the expense 💥. Error is : ${err.message}`
+        );
+      }
+    };
+
+    return <AlertDialogSlide handleConfirmation={handleDelete} />;
+  }, [expenses, selectedRows, toggleCleared]);
 
   return (
-    <div>
-      <button
-        type="button"
-        onClick={handleDeleteAll}
-        disabled={expenses.length === 0}
-      >
-        Delete All
-      </button>
-      <div className="expenseListContainer">
-        {expenses.length !== 0 ? (
-          <ul>
-            {expenses.map((expense) => (
-              <ExpenseListItem key={expense.id} {...expense} />
-            ))}
-          </ul>
-        ) : (
-          <Loader type="Grid" color="white" />
-        )}
+    <div style={{ width: '100%', padding: '1rem' }}>
+      <DataTableBase
+        columns={columns}
+        data={expenses}
+        progressPending={loading === 'pending'}
+        title={'Expenses List'}
+        onSelectedRowsChange={handleRowSelected}
+        contextActions={contextActions}
+        clearSelectedRows={toggleCleared}
+      />
+      <div>
+        <DatePickerRange
+          setStart={(start) => dispatch(setStartDate(formatISO(start, { representation: 'date' })))}
+          setEnd={(end) => dispatch(setEndDate(formatISO(end, { representation: 'date' })))}
+          setFilter={() => dispatch(setDateFilter())}
+          resetFilter={() => dispatch(resetDateFilter())}
+        />
       </div>
-      <fieldset className="filtersContainer">
-        <legend>Expense filters</legend>
-        <div>
-          <label htmlFor="text-search">Search expense: </label>
-          <input
-            type="text"
-            name="text-search"
-            placeholder="e.g. McDonalds"
-            onChange={(e) => dispatch(setTextFilter(e.target.value))}
-          />
-        </div>
-        <div>
-          <label htmlFor="sortBy">Sort by: </label>
-          <select
-            name="sortBy"
-            onChange={(e) => dispatch(setSortBy(e.target.value))}
-          >
-            <option value="">Select sorting</option>
-            <option value="amount-desc">Amount - High to Low</option>
-            <option value="amount-asc">Amount - Low to High</option>
-            <option value="date-desc">Date - Oldest to Newest</option>
-            <option value="date-asc">Date - Newest to Oldest</option>
-          </select>
-        </div>
-        <div>
-          <DatePickerRange
-            setStart={(start) =>
-              dispatch(
-                setStartDate(formatISO(start, { representation: 'date' }))
-              )
-            }
-            setEnd={(end) =>
-              dispatch(setEndDate(formatISO(end, { representation: 'date' })))
-            }
-            setFilter={() => dispatch(setDateFilter())}
-            resetFilter={() => dispatch(resetDateFilter())}
-          />
-        </div>
-      </fieldset>
     </div>
   );
 };

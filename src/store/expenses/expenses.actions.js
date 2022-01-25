@@ -11,7 +11,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { push, ref, set, get, remove, child, update } from 'firebase/database';
 import { auth } from '@database/firebase';
 
-// Internal imports
+// Local imports
 import db from '@database/firebase.js';
 
 // Actions
@@ -133,7 +133,7 @@ export const deleteExpense = createAsyncThunk(
     if (currentRequestId !== requestId || loading !== 'pending') {
       return;
     }
-    const expenseRef = ref(db, 'users/' + uid + 'expenses/' + id);
+    const expenseRef = ref(db, 'users/' + uid + '/expenses/' + id);
     await remove(expenseRef);
     return id;
   }

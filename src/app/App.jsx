@@ -62,7 +62,14 @@ const App = () => {
               </PrivateRoute>
             }
           />
-          <Route path="/help" element={<HelpPage />} />
+          <Route
+            path="/help"
+            element={
+              <PrivateRoute>
+                <HelpPage />
+              </PrivateRoute>
+            }
+          />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

@@ -6,9 +6,8 @@ import { MOBILE, primaryTextColor, dividerColor } from '@assets/theme';
 
 // Styled Component
 export const FooterStyles = styled.div`
-  background-color: ${(props) => props.theme.colors.footerBg};
-  color: ${primaryTextColor};
-  border-top: 1px solid ${dividerColor};
+  background-color: ${(props) => props.theme.palette.surface2};
+  color: ${(props) => props.theme.palette.text1};
 
   a:link,
   a:visited {

@@ -1,17 +1,16 @@
 // External imports
 import React from 'react';
 
-// Internal imports
-import { ExpenseForm } from '@components/Forms/ExpenseForm/ExpenseForm.jsx';
-
-// Assets
+// Local imports
+import { ExpenseForm } from '@components/Forms/ExpenseForm.jsx';
+import { AddExpensePageStyles } from './AddExpensePage.styles';
 
 // Component
 const AddExpensePage = () => {
   return (
-    <>
+    <AddExpensePageStyles>
       <ExpenseForm />
-    </>
+    </AddExpensePageStyles>
   );
 };
 
