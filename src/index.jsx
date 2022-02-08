@@ -1,33 +1,25 @@
-'use strict';
 // External imports
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import * as serviceWorker from './serviceWorker';
-
-if (process.env.NODE_ENV !== 'production') {
-  console.log('Looks like we are in development mode!');
-}
+import { BrowserRouter } from 'react-router-dom';
 
 // Local imports
+import App from './App.jsx';
 import 'normalize.css/normalize.css';
-import { store } from '@store/store';
-import App from '@app/App.jsx';
+import { store } from './store/store';
 
 // Constants definition
 const MOUNT_NODE = document.getElementById('root');
-
-// Rendering the APP
-render(
+const jsx = (
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>,
-  MOUNT_NODE
+    <BrowserRouter>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </BrowserRouter>
+  </React.StrictMode>
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+// Rendering the APP
+render(jsx, MOUNT_NODE);

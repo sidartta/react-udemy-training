@@ -1,6 +1,6 @@
 {
-  "short_name": "My App",
-  "name": "App Boilerplate - TODO : to be modified + list all used icons",
+  "short_name": "Xpensify App",
+  "name": "Xpensify the simple expense management app",
   "icons": [
     {
       "src": "favicon.ico",

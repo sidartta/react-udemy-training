@@ -1,12 +1,12 @@
 // External imports
-import { createAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { formatISO, parseISO } from 'date-fns';
 
-// Internal imports
+// Local imports
 import {
   filterListItems,
   sortByListItems,
-  addExpensetoDB,
+  addExpenseToDB,
   initializeExpenses,
   clearAllExpenses,
   deleteExpense,
@@ -14,15 +14,16 @@ import {
 } from './expenses.actions';
 
 // Initialization of state
-export const initialState = {
+export const INITIAL_STATE = {
   expenses: [],
+  expensesAmountTotal: 0,
   loading: 'idle',
   currentRequestId: undefined,
   error: null,
   filters: {
     text: '',
     sortBy: '',
-    startDate: formatISO(new Date(), { representation: 'date' }),
+    startDate: formatISO(new Date()),
     endDate: null,
     filterByDate: false,
     expenseID: '',
@@ -30,10 +31,10 @@ export const initialState = {
   },
 };
 
-// Expenses sclice definition
+// Expenses slice definition
 const expensesSlice = createSlice({
   name: 'expenses',
-  initialState,
+  initialState: INITIAL_STATE,
   reducers: {
     setTextFilter: (state, action = '') => {
       state.filters.text = action.payload;
@@ -68,34 +69,6 @@ const expensesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(addExpensetoDB.pending, (state, action) => {
-        if (state.loading === 'idle') {
-          state.loading = 'pending';
-          state.currentRequestId = action.meta.requestId;
-        }
-      })
-      .addCase(addExpensetoDB.fulfilled, (state, action) => {
-        const { requestId } = action.meta;
-        if (
-          state.currentRequestId === requestId &&
-          state.loading === 'pending'
-        ) {
-          state.expenses.push(action.payload);
-          state.currentRequestId = undefined;
-          state.loading = 'idle';
-        }
-      })
-      .addCase(addExpensetoDB.rejected, (state, action) => {
-        const { requestId } = action.meta;
-        if (
-          state.currentRequestId === requestId &&
-          state.loading === 'pending'
-        ) {
-          state.currentRequestId = undefined;
-          state.loading = 'idle';
-          state.error = action.error;
-        }
-      })
       .addCase(initializeExpenses.pending, (state, action) => {
         if (state.loading === 'idle') {
           state.loading = 'pending';
@@ -114,6 +87,34 @@ const expensesSlice = createSlice({
         }
       })
       .addCase(initializeExpenses.rejected, (state, action) => {
+        const { requestId } = action.meta;
+        if (
+          state.currentRequestId === requestId &&
+          state.loading === 'pending'
+        ) {
+          state.currentRequestId = undefined;
+          state.loading = 'idle';
+          state.error = action.error;
+        }
+      })
+      .addCase(addExpenseToDB.pending, (state, action) => {
+        if (state.loading === 'idle') {
+          state.loading = 'pending';
+          state.currentRequestId = action.meta.requestId;
+        }
+      })
+      .addCase(addExpenseToDB.fulfilled, (state, action) => {
+        const { requestId } = action.meta;
+        if (
+          state.currentRequestId === requestId &&
+          state.loading === 'pending'
+        ) {
+          state.expenses.push(action.payload);
+          state.currentRequestId = undefined;
+          state.loading = 'idle';
+        }
+      })
+      .addCase(addExpenseToDB.rejected, (state, action) => {
         const { requestId } = action.meta;
         if (
           state.currentRequestId === requestId &&
