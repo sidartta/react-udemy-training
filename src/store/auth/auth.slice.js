@@ -3,19 +3,21 @@ import { createSlice } from '@reduxjs/toolkit';
 
 // Local imports
 import { startGoogleLogIn, startGoogleLogOut } from './auth.actions';
-import { LocalStorageService } from '@services/index';
+import { LocalStorageService } from '../../services/index';
 
 // Initialization of state
 const {
   isAuth = false,
-  userID = null,
+  user = null,
   accessToken = null,
+  themeMode = 'light',
 } = LocalStorageService.get('auth') || {};
 
 export const INITIAL_STATE = {
   isAuth: isAuth,
-  userID: userID,
+  userAuth: user,
   accessToken: accessToken,
+  themeMode: themeMode,
   currentRequestId: undefined,
   loading: 'idle',
   error: null,
@@ -29,11 +31,12 @@ const authSlice = createSlice({
     handleLoginSuccess: (state, action) => {
       const { token, user } = action.payload.payload;
       state.isAuth = true;
-      state.userID = user;
+      state.userAuth = user;
       state.accessToken = token;
+
       LocalStorageService.set('auth', {
         isAuth: true,
-        userID: user,
+        user: user,
         accessToken: token,
       });
     },
@@ -41,6 +44,9 @@ const authSlice = createSlice({
       state.isAuth = false;
       LocalStorageService.remove('auth');
       state.error = action.payload.payload;
+    },
+    setThemeMode: (state, action) => {
+      state.themeMode = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -76,7 +82,7 @@ const authSlice = createSlice({
           state.currentRequestId = undefined;
           state.loading = 'idle';
           state.isAuth = false;
-          state.userID = null;
+          state.userAuth = null;
           state.accessToken = null;
           LocalStorageService.remove('auth');
         }
@@ -84,11 +90,12 @@ const authSlice = createSlice({
   },
 });
 
-export const { handleLoginSuccess, handleLoginFailure } = authSlice.actions;
+export const { handleLoginSuccess, handleLoginFailure, setThemeMode } =
+  authSlice.actions;
 
+export const selectUserThemeMode = (state) => state.auth.themeMode;
 export const selectUserAthStatus = (state) => state.auth.isAuth;
-export const selectUserID = (state) => state.auth.userID;
-export const selectUserCredential = (state) => state.auth.credential;
+export const selectUserAuth = (state) => state.auth.userAuth;
 export const selectUserToken = (state) => state.auth.accessToken;
 
 export default authSlice.reducer;

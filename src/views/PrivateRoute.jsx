@@ -4,7 +4,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 // Internal imports
-import { selectUserAthStatus } from '@store/auth/auth.slice';
+import { selectUserAthStatus } from '../store/auth/auth.slice';
 
 // Component
 const PrivateRoute = ({ children }) => {

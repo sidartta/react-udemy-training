@@ -4,7 +4,7 @@ import { getAuth, signInWithPopup, signOut } from 'firebase/auth';
 import { GoogleAuthProvider } from 'firebase/auth';
 
 // Internal imports
-import { provider } from '@database/firebase';
+import { provider } from '../../database/firebase';
 
 // Async Actions
 const auth = getAuth();
@@ -20,7 +20,7 @@ export const startGoogleLogIn = createAsyncThunk(
     const credential = GoogleAuthProvider.credentialFromResult(result);
     const token = credential.accessToken;
     const user = result.user;
-    return { token, user: user.displayName };
+    return { token, user };
   }
 );
 

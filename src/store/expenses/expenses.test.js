@@ -1,6 +1,6 @@
 // External imports
 
-// Internal imports
+// Local imports
 import { filterListItems, sortByListItems } from './expenses.actions';
 import fixture from './fixtures';
 

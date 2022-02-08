@@ -5,9 +5,9 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
 // Local imports
-import App from '@app/App.jsx';
+import App from './App.jsx';
 import 'normalize.css/normalize.css';
-import { store } from '@store/store';
+import { store } from './store/store';
 
 // Constants definition
 const MOUNT_NODE = document.getElementById('root');

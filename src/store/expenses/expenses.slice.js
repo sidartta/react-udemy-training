@@ -6,7 +6,7 @@ import { formatISO, parseISO } from 'date-fns';
 import {
   filterListItems,
   sortByListItems,
-  addExpensetoDB,
+  addExpenseToDB,
   initializeExpenses,
   clearAllExpenses,
   deleteExpense,
@@ -31,7 +31,7 @@ export const INITIAL_STATE = {
   },
 };
 
-// Expenses sclice definition
+// Expenses slice definition
 const expensesSlice = createSlice({
   name: 'expenses',
   initialState: INITIAL_STATE,
@@ -97,13 +97,13 @@ const expensesSlice = createSlice({
           state.error = action.error;
         }
       })
-      .addCase(addExpensetoDB.pending, (state, action) => {
+      .addCase(addExpenseToDB.pending, (state, action) => {
         if (state.loading === 'idle') {
           state.loading = 'pending';
           state.currentRequestId = action.meta.requestId;
         }
       })
-      .addCase(addExpensetoDB.fulfilled, (state, action) => {
+      .addCase(addExpenseToDB.fulfilled, (state, action) => {
         const { requestId } = action.meta;
         if (
           state.currentRequestId === requestId &&
@@ -114,7 +114,7 @@ const expensesSlice = createSlice({
           state.loading = 'idle';
         }
       })
-      .addCase(addExpensetoDB.rejected, (state, action) => {
+      .addCase(addExpenseToDB.rejected, (state, action) => {
         const { requestId } = action.meta;
         if (
           state.currentRequestId === requestId &&
